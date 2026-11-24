@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StyleNest — Modern Fashion & Curated Wardrobe</title>
+
+  <!-- Tailwind CSS CDN for rapid responsive layout utilities -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Playfair Display for editorial headings & Poppins for UI body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: "#111111",
+            charcoal: "#222222",
+            ivory: "#FFFFFF",
+            beige: "#F6F2EC",
+            sand: "#EAE2D7",
+            rosegold: "#B76E79",
+            rosegoldDark: "#96535E",
+            muted: "#66605C"
+          },
+          fontFamily: {
+            serif: ["'Playfair Display'", "Georgia", "serif"],
+            sans: ["'Poppins'", "sans-serif"]
+          },
+          boxShadow: {
+            luxury: "0 16px 36px -12px rgba(17, 17, 17, 0.12)",
+            cardHover: "0 24px 44px -12px rgba(183, 110, 121, 0.22)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Custom editorial styling, hover transitions, and scroll animations */
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #FFFFFF;
+      color: #111111;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .font-editorial {
+      font-family: "Playfair Display", Georgia, serif;
+    }
+
+    .hero-scrim {
+      background: linear-gradient(
+        90deg,
+        rgba(17, 17, 17, 0.82) 0%,
+        rgba(17, 17, 17, 0.56) 55%,
+        rgba(17, 17, 17, 0.25) 100%
+      );
+    }
+
+    .collection-scrim {
+      background: linear-gradient(
+        180deg,
+        rgba(17, 17, 17, 0.15) 0%,
+        rgba(17, 17, 17, 0.82) 100%
+      );
+    }
+
+    .product-card {
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 44px -12px rgba(183, 110, 121, 0.22);
+      border-color: #B76E79;
+    }
+
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+
+    .reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hide scrollbar on horizontal trending track while keeping swipe/scroll smooth */
+    .no-scrollbar::-webkit-scrollbar {
+      height: 6px;
+    }
+    .no-scrollbar::-webkit-scrollbar-track {
+      background: #F6F2EC;
+      border-radius: 9999px;
+    }
+    .no-scrollbar::-webkit-scrollbar-thumb {
+      background: #B76E79;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+
+<body class="bg-ivory text-obsidian antialiased selection:bg-rosegold/20 selection:text-obsidian">
+
+  <!-- ==================== 1. STICKY HEADER / NAVIGATION BAR ==================== -->
+  <header id="sticky-header" class="sticky top-0 z-40 bg-ivory/95 backdrop-blur-md border-b border-sand shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20 gap-3">
+
+        <!-- Left: Store Logo -->
+        <a href="#home" class="flex items-center gap-2.5 shrink-0 group focus:outline-none">
+          <span class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-obsidian text-ivory flex items-center justify-center font-editorial text-lg font-bold group-hover:bg-rosegold transition-colors duration-300">
+            S
+          </span>
+          <div class="flex flex-col">
+            <span class="font-editorial text-xl sm:text-2xl font-bold tracking-tight text-obsidian leading-none">
+              Style<span class="text-rosegold">Nest</span>
+            </span>
+            <span class="text-[10px] uppercase tracking-[0.2em] text-muted mt-0.5 hidden sm:block">
+              Atelier & Edit
+            </span>
+          </div>
+        </a>
+
+        <!-- Center: Navigation Links (Desktop) -->
+        <nav class="hidden xl:flex items-center gap-6 text-sm font-medium text-charcoal" aria-label="Main Navigation">
+          <a href="#home" class="hover:text-rosegold transition-colors">Home</a>
+          <a href="#categories" onclick="selectCategoryFilter('Women')" class="hover:text-rosegold transition-colors">Women</a>
+          <a href="#categories" onclick="selectCategoryFilter('Men')" class="hover:text-rosegold transition-colors">Men</a>
+          <a href="#categories" onclick="selectCategoryFilter('Kids')" class="hover:text-rosegold transition-colors">Kids</a>
+          <a href="#categories" onclick="selectCategoryFilter('Accessories')" class="hover:text-rosegold transition-colors">Accessories</a>
+          <a href="#offers" class="hover:text-rosegold transition-colors">Offers</a>
+          <a href="#footer" class="hover:text-rosegold transition-colors">Contact</a>
+        </nav>
+
+        <!-- Search Bar (Desktop & Tablet) -->
+        <div class="hidden md:flex items-center relative flex-1 max-w-xs lg:max-w-sm">
+          <input
+            id="header-search-input"
+            type="search"
+            placeholder="Search dresses, jackets, bags..."
+            aria-label="Search fashion products"
+            class="w-full pl-4 pr-10 py-2 rounded-full bg-beige border border-sand text-xs lg:text-sm text-obsidian placeholder:text-muted focus:outline-none focus:border-rosegold focus:bg-ivory transition-all"
+          />
+          <button
+            id="header-search-btn"
+            type="button"
+            aria-label="Submit search"
+            class="absolute right-3 text-charcoal hover:text-rosegold cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Right: Wishlist, Cart Badges, & Mobile Hamburger -->
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+          <!-- Wishlist Button with Badge -->
+          <button
+            id="open-wishlist-btn"
+            type="button"
+            aria-label="Open wishlist"
+            class="relative p-2.5 rounded-full bg-beige hover:bg-rosegold/15 text-obsidian hover:text-rosegold transition-colors cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            </svg>
+            <span
+              id="wishlist-count-badge"
+              class="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-rosegold text-ivory text-[11px] font-semibold flex items-center justify-center shadow"
+            >
+              0
+            </span>
+          </button>
+
+          <!-- Shopping Cart Button with Badge -->
+          <button
+            id="open-cart-btn"
+            type="button"
+            aria-label="Open shopping cart"
+            class="relative inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-obsidian hover:bg-rosegold text-ivory text-xs sm:text-sm font-medium transition-colors shadow-sm cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+              <path d="M3 6h18" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            <span class="hidden sm:inline">Cart</span>
+            <span
+              id="cart-count-badge"
+              class="min-w-[20px] h-5 px-1.5 rounded-full bg-rosegold text-ivory text-[11px] font-bold flex items-center justify-center"
+            >
+              0
+            </span>
+          </button>
+
+          <!-- Mobile Hamburger Menu Toggle -->
+          <button
+            id="mobile-menu-toggle"
+            type="button"
+            aria-label="Toggle mobile menu"
+            aria-expanded="false"
+            class="xl:hidden p-2.5 rounded-xl bg-beige hover:bg-sand text-obsidian transition-colors cursor-pointer"
+          >
+            <svg id="menu-open-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg id="menu-close-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Search Bar -->
+      <div class="md:hidden pb-3">
+        <div class="relative">
+          <input
+            id="mobile-search-input"
+            type="search"
+            placeholder="Search StyleNest catalog..."
+            aria-label="Search fashion products on mobile"
+            class="w-full pl-4 pr-10 py-2 rounded-full bg-beige border border-sand text-xs text-obsidian placeholder:text-muted focus:outline-none focus:border-rosegold"
+          />
+          <span class="absolute right-3.5 top-2.5 text-muted">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collapsible Mobile / Tablet Drawer -->
+    <div id="mobile-drawer" class="xl:hidden hidden bg-ivory border-t border-sand shadow-lg">
+      <div class="px-4 py-4 space-y-1 text-sm font-medium text-charcoal">
+        <a href="#home" class="mobile-drawer-link block px-4 py-2.5 rounded-xl hover:bg-beige hover:text-rosegold">Home</a>
+        <a href="#categories" onclick="selectCategoryFilter('Women')" class="mobile-drawer-link block px-4 py-2.5 rounded-xl hover:bg-beige hover:text-rosegold">Women</a>
+        <a href="#categories" onclick="selectCategoryFilter('Men')" class="mobile-drawer-link block px-4 py-2.5 rounded-xl hover:bg-beige hover:text-rosegold">Men</a>
+        <a href="#categories" onclick="selectCategoryFilter('Kids')" class="mobile-drawer-link block px-4 py-2.5 rounded-xl hover:bg-beige hover:text-rosegold">Kids</a>
+        <a href="#categories" onclick="selectCategoryFilter('Accessories')" class="mobile-drawer-link block px-4 py-2.5 rounded-xl hover:bg-beige hover:text-rosegold">Accessories</a>
+        <a href="#offers" class="mobile-drawer-link block px-4 py-2.5 rounded-xl hover:bg-beige hover:text-rosegold">Offers</a>
+        <a href="#footer" class="mobile-drawer-link block px-4 py-2.5 rounded-xl hover:bg-beige hover:text-rosegold">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 2. HERO SECTION ==================== -->
+  <section id="home" class="relative min-h-[82vh] md:min-h-[88vh] flex items-center overflow-hidden bg-obsidian">
+    <img
+      src="https://placehold.co/1600x950/1E1A18/F6F2EC?text=StyleNest+New+Season+Editorial"
+      data-real-src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80"
+      alt="Editorial fashion model carrying shopping bags in modern street style"
+      onerror="this.onerror=null; this.src='https://placehold.co/1600x950/1E1A18/F6F2EC?text=StyleNest+New+Season+Fashion';"
+      class="store-photo absolute inset-0 w-full h-full object-cover object-center"
+    />
+    <div class="hero-scrim absolute inset-0"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="max-w-xl space-y-6">
+        <!-- Offer Tag -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rosegold text-ivory text-xs sm:text-sm font-semibold tracking-wide shadow-md">
+          <span>✦</span>
+          <span>Flat 30% Off on First Order</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-editorial text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-ivory leading-[1.08]">
+          New Season, New Style.
+        </h1>
+
+        <!-- Short Description -->
+        <p class="text-beige/95 text-sm sm:text-base md:text-lg leading-relaxed font-light">
+          Discover effortless tailoring, breathable linen staples, sculptural accessories, and timeless evening silhouettes crafted for everyday confidence.
+        </p>
+
+        <!-- Dual CTA Buttons -->
+        <div class="flex flex-wrap items-center gap-4 pt-2">
+          <a
+            href="#products-section"
+            class="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-ivory hover:bg-rosegold text-obsidian hover:text-ivory font-semibold text-sm transition-all duration-300 shadow-lg"
+          >
+            Shop Now
+          </a>
+          <a
+            href="#offers"
+            class="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-transparent hover:bg-ivory/15 text-ivory border border-ivory/75 font-semibold text-sm transition-all duration-300"
+          >
+            View Offers
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. CLOTHING CATEGORIES ==================== -->
+  <section id="categories" class="py-16 md:py-24 bg-beige/60 reveal-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-[0.2em] text-rosegold">Curated Departments</span>
+          <h2 class="font-editorial text-3xl sm:text-4xl md:text-5xl font-bold text-obsidian mt-1">
+            Shop by Category
+          </h2>
+        </div>
+        <button
+          type="button"
+          onclick="resetAllFilters()"
+          class="text-xs sm:text-sm font-medium text-charcoal hover:text-rosegold underline underline-offset-4 self-start md:self-auto cursor-pointer"
+        >
+          Show All Products
+        </button>
+      </div>
+
+      <!-- 8 Categories Grid -->
+      <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. FEATURED COLLECTIONS ==================== -->
+  <section id="collections" class="py-16 md:py-24 bg-ivory reveal-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-semibold uppercase tracking-[0.2em] text-rosegold">Editorial Capsule Drops</span>
+        <h2 class="font-editorial text-3xl sm:text-4xl md:text-5xl font-bold text-obsidian mt-1">
+          Featured Collections
+        </h2>
+        <p class="text-muted text-sm sm:text-base mt-3">
+          Thoughtfully edited wardrobes designed around seasons, moods, and modern dressing.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Collection 1: Summer Collection -->
+        <article class="group relative h-80 sm:h-96 rounded-3xl overflow-hidden shadow-luxury">
+          <img
+            src="https://placehold.co/600x800/D9C5B2/111111?text=Summer+Collection"
+            data-real-src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80"
+            alt="Summer Collection sunlit resort wear"
+            onerror="this.onerror=null; this.src='https://placehold.co/600x800/D9C5B2/111111?text=Summer+Collection';"
+            class="store-photo w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div class="collection-scrim absolute inset-0"></div>
+          <div class="relative z-10 h-full p-6 flex flex-col justify-end text-ivory">
+            <h3 class="font-editorial text-2xl font-bold">Summer Collection</h3>
+            <p class="text-beige/90 text-xs sm:text-sm mt-1.5 mb-4 line-clamp-2">
+              Airy linen sets, sun-washed cottons, and effortless warm-weather silhouettes.
+            </p>
+            <button
+              type="button"
+              onclick="filterByCollection('Summer')"
+              class="w-fit px-4 py-2 rounded-full bg-ivory text-obsidian hover:bg-rosegold hover:text-ivory text-xs font-semibold transition-colors cursor-pointer"
+            >
+              Explore Collection
+            </button>
+          </div>
+        </article>
+
+        <!-- Collection 2: Winter Collection -->
+        <article class="group relative h-80 sm:h-96 rounded-3xl overflow-hidden shadow-luxury">
+          <img
+            src="https://placehold.co/600x800/2B2320/F6F2EC?text=Winter+Collection"
+            data-real-src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=800&q=80"
+            alt="Winter Collection tailored coats and knitwear"
+            onerror="this.onerror=null; this.src='https://placehold.co/600x800/2B2320/F6F2EC?text=Winter+Collection';"
+            class="store-photo w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div class="collection-scrim absolute inset-0"></div>
+          <div class="relative z-10 h-full p-6 flex flex-col justify-end text-ivory">
+            <h3 class="font-editorial text-2xl font-bold">Winter Collection</h3>
+            <p class="text-beige/90 text-xs sm:text-sm mt-1.5 mb-4 line-clamp-2">
+              Structured wool-blend coats, chunky knits, and cozy cold-weather layers.
+            </p>
+            <button
+              type="button"
+              onclick="filterByCollection('Winter')"
+              class="w-fit px-4 py-2 rounded-full bg-ivory text-obsidian hover:bg-rosegold hover:text-ivory text-xs font-semibold transition-colors cursor-pointer"
+            >
+              Explore Collection
+            </button>
+          </div>
+        </article>
+
+        <!-- Collection 3: Party Wear -->
+        <article class="group relative h-80 sm:h-96 rounded-3xl overflow-hidden shadow-luxury">
+          <img
+            src="https://placehold.co/600x800/3D1E26/F6F2EC?text=Party+Wear"
+            data-real-src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=80"
+            alt="Party Wear evening dress and statement styling"
+            onerror="this.onerror=null; this.src='https://placehold.co/600x800/3D1E26/F6F2EC?text=Party+Wear';"
+            class="store-photo w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div class="collection-scrim absolute inset-0"></div>
+          <div class="relative z-10 h-full p-6 flex flex-col justify-end text-ivory">
+            <h3 class="font-editorial text-2xl font-bold">Party Wear</h3>
+            <p class="text-beige/90 text-xs sm:text-sm mt-1.5 mb-4 line-clamp-2">
+              Lustrous satins, sleek evening blazers, and standout pieces for celebrations.
+            </p>
+            <button
+              type="button"
+              onclick="filterByCollection('Party')"
+              class="w-fit px-4 py-2 rounded-full bg-ivory text-obsidian hover:bg-rosegold hover:text-ivory text-xs font-semibold transition-colors cursor-pointer"
+            >
+              Explore Collection
+            </button>
+          </div>
+        </article>
+
+        <!-- Collection 4: Casual Essentials -->
+        <article class="group relative h-80 sm:h-96 rounded-3xl overflow-hidden shadow-luxury">
+          <img
+            src="https://placehold.co/600x800/4A423C/F6F2EC?text=Casual+Essentials"
+            data-real-src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80"
+            alt="Casual Essentials everyday tees and relaxed fit"
+            onerror="this.onerror=null; this.src='https://placehold.co/600x800/4A423C/F6F2EC?text=Casual+Essentials';"
+            class="store-photo w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div class="collection-scrim absolute inset-0"></div>
+          <div class="relative z-10 h-full p-6 flex flex-col justify-end text-ivory">
+            <h3 class="font-editorial text-2xl font-bold">Casual Essentials</h3>
+            <p class="text-beige/90 text-xs sm:text-sm mt-1.5 mb-4 line-clamp-2">
+              Elevated daily basics, relaxed denim, and versatile staples you reach for first.
+            </p>
+            <button
+              type="button"
+              onclick="filterByCollection('Casual')"
+              class="w-fit px-4 py-2 rounded-full bg-ivory text-obsidian hover:bg-rosegold hover:text-ivory text-xs font-semibold transition-colors cursor-pointer"
+            >
+              Explore Collection
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. PRODUCT CARDS SECTION ==================== -->
+  <section id="products-section" class="py-16 md:py-24 bg-beige/55 reveal-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-[0.2em] text-rosegold">Curated Catalogue</span>
+          <h2 id="active-filter-heading" class="font-editorial text-3xl sm:text-4xl md:text-5xl font-bold text-obsidian mt-1">
+            Featured Fashion Picks
+          </h2>
+          <p id="active-filter-subtext" class="text-muted text-sm mt-1.5">
+            Showing all featured pieces across categories.
+          </p>
+        </div>
+
+        <!-- Quick Filter Reset & Sort -->
+        <div class="flex flex-wrap items-center gap-3">
+          <select
+            id="sort-products-select"
+            aria-label="Sort products"
+            class="px-4 py-2.5 rounded-full bg-ivory border border-sand text-xs sm:text-sm font-medium text-obsidian focus:outline-none focus:border-rosegold cursor-pointer"
+          >
+            <option value="featured">Sort: Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+
+          <button
+            type="button"
+            onclick="resetAllFilters()"
+            class="px-4 py-2.5 rounded-full bg-obsidian hover:bg-rosegold text-ivory text-xs sm:text-sm font-medium transition-colors cursor-pointer"
+          >
+            Reset Filters
+          </button>
+        </div>
+      </div>
+
+      <!-- 10 Responsive Product Cards Grid -->
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. OFFERS AND DEALS SECTION ==================== -->
+  <section id="offers" class="py-16 md:py-24 bg-obsidian text-ivory reveal-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Top Banner: Countdown Timer + Promo Code -->
+      <div class="bg-charcoal border border-rosegold/40 rounded-3xl p-6 sm:p-8 lg:p-10 mb-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div class="text-center lg:text-left space-y-2">
+          <span class="inline-block px-3.5 py-1 rounded-full bg-rosegold/20 text-rosegold text-xs font-semibold uppercase tracking-widest">
+            Limited-Time Flash Sale
+          </span>
+          <h2 class="font-editorial text-3xl sm:text-4xl font-bold text-ivory">
+            Seasonal Wardrobe Event
+          </h2>
+          <p class="text-beige/80 text-sm sm:text-base">
+            Use code <strong class="text-ivory bg-rosegold px-2.5 py-0.5 rounded-md tracking-wider">STYLE30</strong> at checkout for extra savings.
+          </p>
+        </div>
+
+        <!-- Countdown Timer Boxes -->
+        <div class="flex flex-col items-center lg:items-end gap-3">
+          <span class="text-xs uppercase tracking-widest text-beige/70">Sale Ends In</span>
+          <div class="grid grid-cols-4 gap-2.5 sm:gap-3 text-center">
+            <div class="bg-obsidian border border-ivory/15 rounded-2xl px-3.5 py-2.5 min-w-[64px]">
+              <span id="cd-days" class="font-editorial text-2xl sm:text-3xl font-bold text-rosegold block">02</span>
+              <span class="text-[11px] text-beige/75 uppercase">Days</span>
+            </div>
+            <div class="bg-obsidian border border-ivory/15 rounded-2xl px-3.5 py-2.5 min-w-[64px]">
+              <span id="cd-hours" class="font-editorial text-2xl sm:text-3xl font-bold text-ivory block">14</span>
+              <span class="text-[11px] text-beige/75 uppercase">Hours</span>
+            </div>
+            <div class="bg-obsidian border border-ivory/15 rounded-2xl px-3.5 py-2.5 min-w-[64px]">
+              <span id="cd-mins" class="font-editorial text-2xl sm:text-3xl font-bold text-ivory block">38</span>
+              <span class="text-[11px] text-beige/75 uppercase">Mins</span>
+            </div>
+            <div class="bg-obsidian border border-ivory/15 rounded-2xl px-3.5 py-2.5 min-w-[64px]">
+              <span id="cd-secs" class="font-editorial text-2xl sm:text-3xl font-bold text-rosegold block">45</span>
+              <span class="text-[11px] text-beige/75 uppercase">Secs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Offer Banners -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="rounded-3xl bg-ivory text-obsidian p-7 shadow-luxury flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-rosegold">Bundle Deal</span>
+            <h3 class="font-editorial text-2xl sm:text-3xl font-bold mt-2">Buy 2 Get 1 Free</h3>
+            <p class="text-muted text-sm mt-2">
+              Mix and match eligible casual tees, tops, and everyday accessories across the store.
+            </p>
+          </div>
+          <button
+            type="button"
+            onclick="applyPromoCode('STYLE30')"
+            class="mt-6 w-fit px-5 py-2.5 rounded-full bg-obsidian hover:bg-rosegold text-ivory text-xs font-semibold transition-colors cursor-pointer"
+          >
+            Claim with STYLE30
+          </button>
+        </div>
+
+        <div class="rounded-3xl bg-rosegold text-ivory p-7 shadow-luxury flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-ivory/85">Cold Weather Edit</span>
+            <h3 class="font-editorial text-2xl sm:text-3xl font-bold mt-2">Flat 40% Off on Winter Wear</h3>
+            <p class="text-ivory/90 text-sm mt-2">
+              Stay warm in structured overcoats, hoodies, and knit pullovers at member-exclusive prices.
+            </p>
+          </div>
+          <a
+            href="#products-section"
+            onclick="filterByCollection('Winter')"
+            class="mt-6 w-fit px-5 py-2.5 rounded-full bg-ivory hover:bg-obsidian text-obsidian hover:text-ivory text-xs font-semibold transition-colors"
+          >
+            Shop Winter Wear
+          </a>
+        </div>
+
+        <div class="rounded-3xl bg-beige text-obsidian p-7 shadow-luxury flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-rosegold">Complimentary Delivery</span>
+            <h3 class="font-editorial text-2xl sm:text-3xl font-bold mt-2">Free Shipping on Orders Above ₹999</h3>
+            <p class="text-muted text-sm mt-2">
+              Fast doorstep delivery and easy 14-day exchanges on qualifying orders across India.
+            </p>
+          </div>
+          <button
+            type="button"
+            onclick="copyCouponCode('STYLE30')"
+            class="mt-6 w-fit px-5 py-2.5 rounded-full bg-obsidian hover:bg-rosegold text-ivory text-xs font-semibold transition-colors cursor-pointer"
+          >
+            Copy Code: STYLE30
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 7. TRENDING PRODUCTS (HORIZONTAL ROW / CAROUSEL) ==================== -->
+  <section id="trending" class="py-16 md:py-24 bg-ivory reveal-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-[0.2em] text-rosegold">Most Wanted Right Now</span>
+          <h2 class="font-editorial text-3xl sm:text-4xl font-bold text-obsidian mt-1">
+            Trending Products
+          </h2>
+        </div>
+
+        <!-- Carousel Scroll Controls -->
+        <div class="flex items-center gap-2">
+          <button
+            id="trending-prev-btn"
+            type="button"
+            aria-label="Scroll trending products left"
+            class="w-10 h-10 rounded-full bg-beige hover:bg-rosegold hover:text-ivory text-obsidian flex items-center justify-center transition-colors cursor-pointer"
+          >
+            ←
+          </button>
+          <button
+            id="trending-next-btn"
+            type="button"
+            aria-label="Scroll trending products right"
+            class="w-10 h-10 rounded-full bg-beige hover:bg-rosegold hover:text-ivory text-obsidian flex items-center justify-center transition-colors cursor-pointer"
+          >
+            →
+          </button>
+        </div>
+      </div>
+
+      <!-- Horizontal Scrollable Track -->
+      <div id="trending-carousel" class="flex gap-5 overflow-x-auto pb-4 no-scrollbar scroll-smooth"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 8. SHOPPING SECTIONS (PRICE, OCCASION, NEW ARRIVALS) ==================== -->
+  <section id="shopping-guides" class="py-16 md:py-24 bg-beige/70 reveal-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+
+      <!-- 8A. Shop by Price -->
+      <div>
+        <div class="mb-6">
+          <span class="text-xs font-semibold uppercase tracking-[0.2em] text-rosegold">Budget-Friendly Edits</span>
+          <h2 class="font-editorial text-2xl sm:text-3xl md:text-4xl font-bold text-obsidian mt-1">
+            Shop by Price
+          </h2>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <button
+            type="button"
+            onclick="filterByPriceRange('under-499')"
+            class="p-5 sm:p-6 rounded-2xl bg-ivory hover:bg-obsidian text-obsidian hover:text-ivory border border-sand text-left shadow-sm transition-all duration-300 cursor-pointer group"
+          >
+            <span class="text-xs uppercase tracking-wider text-rosegold font-semibold">Value Picks</span>
+            <p class="font-editorial text-xl sm:text-2xl font-bold mt-1">Under ₹499</p>
+          </button>
+
+          <button
+            type="button"
+            onclick="filterByPriceRange('500-999')"
+            class="p-5 sm:p-6 rounded-2xl bg-ivory hover:bg-obsidian text-obsidian hover:text-ivory border border-sand text-left shadow-sm transition-all duration-300 cursor-pointer group"
+          >
+            <span class="text-xs uppercase tracking-wider text-rosegold font-semibold">Everyday Staples</span>
+            <p class="font-editorial text-xl sm:text-2xl font-bold mt-1">₹500 – ₹999</p>
+          </button>
+
+          <button
+            type="button"
+            onclick="filterByPriceRange('1000-1999')"
+            class="p-5 sm:p-6 rounded-2xl bg-ivory hover:bg-obsidian text-obsidian hover:text-ivory border border-sand text-left shadow-sm transition-all duration-300 cursor-pointer group"
+          >
+            <span class="text-xs uppercase tracking-wider text-rosegold font-semibold">Signature Pieces</span>
+            <p class="font-editorial text-xl sm:text-2xl font-bold mt-1">₹1000 – ₹1999</p>
+          </button>
+
+          <button
+            type="button"
+            onclick="filterByPriceRange('above-2000')"
+            class="p-5 sm:p-6 rounded-2xl bg-ivory hover:bg-obsidian text-obsidian hover:text-ivory border border-sand text-left shadow-sm transition-all duration-300 cursor-pointer group"
+          >
+            <span class="text-xs uppercase tracking-wider text-rosegold font-semibold">Statement & Luxe</span>
+            <p class="font-editorial text-xl sm:text-2xl font-bold mt-1">Above ₹2000</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- 8B. Shop by Occasion -->
+      <div>
+        <div class="mb-6">
+          <span class="text-xs font-semibold uppercase tracking-[0.2em] text-rosegold">Dressed for the Moment</span>
+          <h2 class="font-editorial text-2xl sm:text-3xl md:text-4xl font-bold text-obsidian mt-1">
+            Shop by Occasion
+          </h2>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <button type="button" onclick="filterByOccasion('Casual')" class="px-5 py-4 rounded-2xl bg-ivory hover:bg-rosegold text-obsidian hover:text-ivory border border-sand font-semibold text-sm transition-colors shadow-sm cursor-pointer">
+            Casual
+          </button>
+          <button type="button" onclick="filterByOccasion('Office Wear')" class="px-5 py-4 rounded-2xl bg-ivory hover:bg-rosegold text-obsidian hover:text-ivory border border-sand font-semibold text-sm transition-colors shadow-sm cursor-pointer">
+            Office Wear
+          </button>
+          <button type="button" onclick="filterByOccasion('Party Wear')" class="px-5 py-4 rounded-2xl bg-ivory hover:bg-rosegold text-obsidian hover:text-ivory border border-sand font-semibold text-sm transition-colors shadow-sm cursor-pointer">
+            Party Wear
+          </button>
+          <button type="button" onclick="filterByOccasion('Wedding')" class="px-5 py-4 rounded-2xl bg-ivory hover:bg-rosegold text-obsidian hover:text-ivory border border-sand font-semibold text-sm transition-colors shadow-sm cursor-pointer">
+            Wedding
+          </button>
+          <button type="button" onclick="filterByOccasion('Sports')" class="px-5 py-4 rounded-2xl bg-ivory hover:bg-rosegold text-obsidian hover:text-ivory border border-sand font-semibold text-sm transition-colors shadow-sm cursor-pointer col-span-2 sm:col-span-1">
+            Sports
+          </button>
+        </div>
+      </div>
+
+      <!-- 8C. New Arrivals Section -->
+      <div id="new-arrivals">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-[0.2em] text-rosegold">Fresh Off the Rack</span>
+            <h2 class="font-editorial text-2xl sm:text-3xl md:text-4xl font-bold text-obsidian mt-1">
+              New Arrivals
+            </h2>
+          </div>
+          <p class="text-xs sm:text-sm text-muted">Latest drops added to StyleNest this week.</p>
+        </div>
+        <div id="new-arrivals-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 10. TESTIMONIALS SECTION ==================== -->
+  <section id="testimonials" class="py-16 md:py-24 bg-ivory reveal-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-semibold uppercase tracking-[0.2em] text-rosegold">Community Voices</span>
+        <h2 class="font-editorial text-3xl sm:text-4xl md:text-5xl font-bold text-obsidian mt-1">
+          Loved by StyleNest Shoppers
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+        <!-- Review 1 -->
+        <article class="bg-beige/75 border border-sand rounded-3xl p-7 shadow-luxury flex flex-col justify-between">
+          <div>
+            <div class="text-rosegold text-sm mb-3" aria-label="5 out of 5 stars">★★★★★</div>
+            <p class="text-charcoal text-sm sm:text-base leading-relaxed italic mb-6">
+              “The Rose Linen Co-Ord Set fits like a dream and the fabric breathes so well in warm weather. Delivery was super quick too!”
+            </p>
+          </div>
+          <div class="flex items-center gap-3.5 pt-4 border-t border-sand">
+            <img
+              src="https://placehold.co/120x120/B76E79/FFFFFF?text=SM"
+              data-real-src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+              alt="Sneha Menon avatar"
+              onerror="this.onerror=null; this.src='https://placehold.co/120x120/B76E79/FFFFFF?text=SM';"
+              class="store-photo w-12 h-12 rounded-full object-cover shrink-0"
+            />
+            <div>
+              <h3 class="font-editorial font-bold text-obsidian text-base">Sneha Menon</h3>
+              <p class="text-xs text-muted">Verified Buyer · Bengaluru</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Review 2 -->
+        <article class="bg-beige/75 border border-sand rounded-3xl p-7 shadow-luxury flex flex-col justify-between">
+          <div>
+            <div class="text-rosegold text-sm mb-3" aria-label="5 out of 5 stars">★★★★★</div>
+            <p class="text-charcoal text-sm sm:text-base leading-relaxed italic mb-6">
+              “Found my go-to office blazer and structured tote here. The quality-to-price ratio on StyleNest is genuinely impressive.”
+            </p>
+          </div>
+          <div class="flex items-center gap-3.5 pt-4 border-t border-sand">
+            <img
+              src="https://placehold.co/120x120/111111/FFFFFF?text=VD"
+              data-real-src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80"
+              alt="Vikram Deshmukh avatar"
+              onerror="this.onerror=null; this.src='https://placehold.co/120x120/111111/FFFFFF?text=VD';"
+              class="store-photo w-12 h-12 rounded-full object-cover shrink-0"
+            />
+            <div>
+              <h3 class="font-editorial font-bold text-obsidian text-base">Vikram Deshmukh</h3>
+              <p class="text-xs text-muted">Verified Buyer · Mumbai</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Review 3 -->
+        <article class="bg-beige/75 border border-sand rounded-3xl p-7 shadow-luxury flex flex-col justify-between">
+          <div>
+            <div class="text-rosegold text-sm mb-3" aria-label="5 out of 5 stars">★★★★★</div>
+            <p class="text-charcoal text-sm sm:text-base leading-relaxed italic mb-6">
+              “Applied code STYLE30 on my first order and picked up evening wear plus gold-toned hoops. Everything arrived neatly packaged.”
+            </p>
+          </div>
+          <div class="flex items-center gap-3.5 pt-4 border-t border-sand">
+            <img
+              src="https://placehold.co/120x120/96535E/FFFFFF?text=KP"
+              data-real-src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80"
+              alt="Kavya Nair avatar"
+              onerror="this.onerror=null; this.src='https://placehold.co/120x120/96535E/FFFFFF?text=KP';"
+              class="store-photo w-12 h-12 rounded-full object-cover shrink-0"
+            />
+            <div>
+              <h3 class="font-editorial font-bold text-obsidian text-base">Kavya Nair</h3>
+              <p class="text-xs text-muted">Verified Buyer · Hyderabad</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 11. NEWSLETTER SECTION ==================== -->
+  <section id="newsletter" class="py-16 md:py-20 bg-beige border-y border-sand reveal-on-scroll">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="text-xs font-semibold uppercase tracking-[0.2em] text-rosegold">StyleNest Insider</span>
+      <h2 class="font-editorial text-3xl sm:text-4xl font-bold text-obsidian mt-1">
+        Get Early Access to New Drops & Offers
+      </h2>
+      <p class="text-muted text-sm sm:text-base mt-2 max-w-xl mx-auto">
+        Join our mailing list for weekly style notes, seasonal lookbooks, and members-only discount codes.
+      </p>
+
+      <form id="newsletter-form" class="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-lg mx-auto">
+        <input
+          id="newsletter-email"
+          type="email"
+          required
+          placeholder="Enter your email address"
+          aria-label="Email address for newsletter"
+          class="w-full sm:flex-1 px-5 py-3.5 rounded-full bg-ivory border border-sand text-sm text-obsidian focus:outline-none focus:border-rosegold"
+        />
+        <button
+          type="submit"
+          class="w-full sm:w-auto px-7 py-3.5 rounded-full bg-obsidian hover:bg-rosegold text-ivory text-sm font-semibold transition-colors shadow-md cursor-pointer"
+        >
+          Subscribe
+        </button>
+      </form>
+
+      <p id="newsletter-success" class="hidden mt-4 text-sm font-medium text-rosegoldDark"></p>
+    </div>
+  </section>
+
+  <!-- ==================== 12. FOOTER ==================== -->
+  <footer id="footer" class="bg-obsidian text-ivory pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-ivory/15">
+
+        <!-- Store Information & Logo -->
+        <div class="space-y-4">
+          <a href="#home" class="inline-flex items-center gap-2">
+            <span class="w-9 h-9 rounded-full bg-rosegold text-ivory flex items-center justify-center font-editorial font-bold">
+              S
+            </span>
+            <span class="font-editorial text-2xl font-bold">
+              Style<span class="text-rosegold">Nest</span>
+            </span>
+          </a>
+          <p class="text-beige/75 text-xs sm:text-sm leading-relaxed">
+            Modern silhouettes, intentional fabrics, and accessible luxury crafted for everyday wardrobes.
+          </p>
+          <p class="text-beige/70 text-xs">
+            support@stylenest.in · +91 80 4890 2210
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="font-editorial text-lg font-bold mb-4 text-ivory">Quick Links</h3>
+          <ul class="space-y-2.5 text-sm text-beige/80">
+            <li><a href="#collections" class="hover:text-rosegold transition-colors">About Us</a></li>
+            <li><a href="#newsletter" class="hover:text-rosegold transition-colors">Contact</a></li>
+            <li><a href="#footer" onclick="showInfoToast('Privacy Policy: We protect your personal data and never share order details.')" class="hover:text-rosegold transition-colors">Privacy Policy</a></li>
+            <li><a href="#footer" onclick="showInfoToast('Terms & Conditions: All orders subject to standard StyleNest store policies.')" class="hover:text-rosegold transition-colors">Terms & Conditions</a></li>
+          </ul>
+        </div>
+
+        <!-- Customer Support -->
+        <div>
+          <h3 class="font-editorial text-lg font-bold mb-4 text-ivory">Customer Support</h3>
+          <ul class="space-y-2.5 text-sm text-beige/80">
+            <li><a href="#offers" onclick="showInfoToast('FAQs: Use code STYLE30 at checkout for 30% savings on eligible styles.')" class="hover:text-rosegold transition-colors">FAQs</a></li>
+            <li><a href="#offers" onclick="showInfoToast('Shipping: Free shipping on orders above ₹999 across India.')" class="hover:text-rosegold transition-colors">Shipping</a></li>
+            <li><a href="#footer" onclick="showInfoToast('Returns: Hassle-free 14-day returns and size exchanges on unworn items.')" class="hover:text-rosegold transition-colors">Returns</a></li>
+            <li><a href="#footer" onclick="showInfoToast('Track Order: Order tracking links are sent via email and SMS upon dispatch.')" class="hover:text-rosegold transition-colors">Track Order</a></li>
+          </ul>
+        </div>
+
+        <!-- Social Media Icons -->
+        <div>
+          <h3 class="font-editorial text-lg font-bold mb-4 text-ivory">Follow StyleNest</h3>
+          <p class="text-xs text-beige/75 mb-4">Daily outfit inspiration & behind-the-scenes edits.</p>
+          <div class="flex items-center gap-3">
+            <!-- Instagram -->
+            <a href="#footer" aria-label="StyleNest on Instagram" onclick="showInfoToast('Opening @stylenest.official on Instagram')" class="w-10 h-10 rounded-full bg-charcoal hover:bg-rosegold text-ivory flex items-center justify-center transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+              </svg>
+            </a>
+            <!-- Facebook -->
+            <a href="#footer" aria-label="StyleNest on Facebook" onclick="showInfoToast('Opening StyleNest on Facebook')" class="w-10 h-10 rounded-full bg-charcoal hover:bg-rosegold text-ivory flex items-center justify-center transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z" />
+              </svg>
+            </a>
+            <!-- Twitter / X -->
+            <a href="#footer" aria-label="StyleNest on X" onclick="showInfoToast('Opening @stylenest on X')" class="w-10 h-10 rounded-full bg-charcoal hover:bg-rosegold text-ivory flex items-center justify-center transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <!-- YouTube -->
+            <a href="#footer" aria-label="StyleNest on YouTube" onclick="showInfoToast('Opening StyleNest Lookbooks on YouTube')" class="w-10 h-10 rounded-full bg-charcoal hover:bg-rosegold text-ivory flex items-center justify-center transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-beige/65">
+        <p>© <span id="copyright-year">2026</span> StyleNest Fashion Store. All rights reserved.</p>
+        <p>Crafted with beige, obsidian & rose gold accents.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== 9. SHOPPING CART DRAWER ==================== -->
+  <div id="cart-backdrop" class="fixed inset-0 z-50 hidden bg-obsidian/60 backdrop-blur-xs">
+    <aside
+      id="cart-drawer"
+      aria-label="Shopping Cart Drawer"
+      class="fixed top-0 right-0 h-full w-full max-w-md bg-ivory shadow-2xl flex flex-col justify-between translate-x-full transition-transform duration-300"
+    >
+      <!-- Drawer Header -->
+      <div class="px-6 py-5 border-b border-sand flex items-center justify-between">
+        <div>
+          <h2 class="font-editorial text-2xl font-bold text-obsidian">Your Shopping Bag</h2>
+          <p id="cart-drawer-subtitle" class="text-xs text-muted">0 items in cart</p>
+        </div>
+        <button
+          id="close-cart-btn"
+          type="button"
+          aria-label="Close shopping cart"
+          class="w-9 h-9 rounded-full bg-beige hover:bg-sand text-obsidian flex items-center justify-center font-bold cursor-pointer"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Cart Items List -->
+      <div id="cart-items-container" class="flex-1 overflow-y-auto px-6 py-4 space-y-4"></div>
+
+      <!-- Drawer Footer: Promo Notice + Total + Checkout -->
+      <div class="p-6 bg-beige border-t border-sand space-y-4">
+        <div id="cart-promo-banner" class="hidden text-xs font-medium text-rosegoldDark bg-rosegold/15 px-3.5 py-2 rounded-xl">
+          Promo code STYLE30 applied!
+        </div>
+
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-muted">Shipping</span>
+          <span id="cart-shipping-label" class="font-medium text-obsidian">Calculated at checkout</span>
+        </div>
+
+        <div class="flex items-center justify-between border-t border-sand pt-3">
+          <span class="font-semibold text-base text-obsidian">Total</span>
+          <span id="cart-total-price" class="font-editorial text-2xl font-bold text-obsidian">₹0</span>
+        </div>
+
+        <button
+          id="checkout-btn"
+          type="button"
+          class="w-full py-3.5 px-5 rounded-full bg-obsidian hover:bg-rosegold text-ivory font-semibold text-sm transition-colors shadow-md cursor-pointer"
+        >
+          Proceed to Checkout
+        </button>
+        <p id="checkout-status-msg" class="hidden text-xs font-medium text-center text-rosegoldDark"></p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Wishlist Quick Modal / Drawer -->
+  <div id="wishlist-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-obsidian/65 p-4" role="dialog" aria-modal="true" aria-label="Saved Wishlist">
+    <div class="bg-ivory border border-sand rounded-3xl max-w-lg w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-sand flex items-center justify-between">
+        <h2 class="font-editorial text-2xl font-bold text-obsidian">Saved Wishlist</h2>
+        <button id="close-wishlist-btn" type="button" aria-label="Close wishlist" class="w-9 h-9 rounded-full bg-beige hover:bg-sand font-bold cursor-pointer">✕</button>
+      </div>
+      <div id="wishlist-items-container" class="p-6 overflow-y-auto space-y-4 flex-1"></div>
+    </div>
+  </div>
+
+  <!-- Non-blocking Toast Banner (replaces native alert) -->
+  <div
+    id="toast-banner"
+    role="status"
+    class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] hidden max-w-md w-[90%] px-5 py-3.5 rounded-2xl bg-obsidian text-ivory border border-rosegold/50 shadow-2xl text-xs sm:text-sm font-medium text-center"
+  ></div>
+
+  <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+  <script>
+    /**
+     * Catalog of 8 clothing & accessory categories.
+     */
+    const CATEGORIES = [
+      {
+        name: "Women",
+        imgFallback: "https://placehold.co/500x600/F6F2EC/111111?text=Women",
+        realImg: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        name: "Men",
+        imgFallback: "https://placehold.co/500x600/222222/FFFFFF?text=Men",
+        realImg: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        name: "Kids",
+        imgFallback: "https://placehold.co/500x600/EAE2D7/111111?text=Kids",
+        realImg: "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        name: "Footwear",
+        imgFallback: "https://placehold.co/500x600/332B27/FFFFFF?text=Footwear",
+        realImg: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        name: "Accessories",
+        imgFallback: "https://placehold.co/500x600/B76E79/FFFFFF?text=Accessories",
+        realImg: "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        name: "Bags",
+        imgFallback: "https://placehold.co/500x600/4A3C35/FFFFFF?text=Bags",
+        realImg: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        name: "Jewellery",
+        imgFallback: "https://placehold.co/500x600/6E4B43/FFFFFF?text=Jewellery",
+        realImg: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        name: "Sportswear",
+        imgFallback: "https://placehold.co/500x600/1A1A1A/FFFFFF?text=Sportswear",
+        realImg: "https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=700&q=80"
+      }
+    ];
+
+    /**
+     * Product catalog (10 items) with original & discounted prices, badges, ratings,
+     * collections, occasions, and new-arrival status.
+     */
+    const PRODUCTS = [
+      {
+        id: "sn-101",
+        name: "Rose Linen Co-Ord Set",
+        category: "Women",
+        collection: "Summer",
+        occasion: "Casual",
+        originalPrice: 1899,
+        price: 1329,
+        discountLabel: "30% OFF",
+        rating: 4.9,
+        badge: "Bestseller",
+        trending: true,
+        isNew: true,
+        imgFallback: "https://placehold.co/500x620/F2D5D9/111111?text=Rose+Linen+Set",
+        realImg: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "sn-102",
+        name: "Obsidian Tailored Blazer",
+        category: "Men",
+        collection: "Party",
+        occasion: "Office Wear",
+        originalPrice: 3499,
+        price: 2799,
+        discountLabel: "20% OFF",
+        rating: 4.8,
+        badge: "Limited Stock",
+        trending: true,
+        isNew: false,
+        imgFallback: "https://placehold.co/500x620/1A1A1A/FFFFFF?text=Obsidian+Blazer",
+        realImg: "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "sn-103",
+        name: "Satin Champagne Midi Dress",
+        category: "Women",
+        collection: "Party",
+        occasion: "Wedding",
+        originalPrice: 2799,
+        price: 2099,
+        discountLabel: "25% OFF",
+        rating: 4.9,
+        badge: "New",
+        trending: true,
+        isNew: true,
+        imgFallback: "https://placehold.co/500x620/E7D5C4/111111?text=Satin+Midi+Dress",
+        realImg: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "sn-104",
+        name: "Structured Beige Tote Bag",
+        category: "Bags",
+        collection: "Casual",
+        occasion: "Office Wear",
+        originalPrice: 1599,
+        price: 1199,
+        discountLabel: "25% OFF",
+        rating: 4.7,
+        badge: "Bestseller",
+        trending: true,
+        isNew: false,
+        imgFallback: "https://placehold.co/500x620/E6DDD2/111111?text=Beige+Tote+Bag",
+        realImg: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "sn-105",
+        name: "Wool-Blend Camel Overcoat",
+        category: "Women",
+        collection: "Winter",
+        occasion: "Office Wear",
+        originalPrice: 4599,
+        price: 2759,
+        discountLabel: "40% OFF",
+        rating: 4.9,
+        badge: "Limited Stock",
+        trending: true,
+        isNew: false,
+        imgFallback: "https://placehold.co/500x620/C8A47E/111111?text=Camel+Overcoat",
+        realImg: "https://images.unsplash.com/photo-1548624313-0396c75e4b1a?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "sn-106",
+        name: "Heavyweight Cotton Tee",
+        category: "Men",
+        collection: "Casual",
+        occasion: "Casual",
+        originalPrice: 699,
+        price: 479,
+        discountLabel: "31% OFF",
+        rating: 4.6,
+        badge: "Bestseller",
+        trending: false,
+        isNew: true,
+        imgFallback: "https://placehold.co/500x620/EAE2D7/111111?text=Cotton+Tee",
+        realImg: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "sn-107",
+        name: "Sculpted Rose-Gold Hoops",
+        category: "Jewellery",
+        collection: "Party",
+        occasion: "Wedding",
+        originalPrice: 799,
+        price: 599,
+        discountLabel: "25% OFF",
+        rating: 4.8,
+        badge: "New",
+        trending: true,
+        isNew: true,
+        imgFallback: "https://placehold.co/500x620/B76E79/FFFFFF?text=Rose+Gold+Hoops",
+        realImg: "https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "sn-108",
+        name: "Junior Knit Hoodie Set",
+        category: "Kids",
+        collection: "Winter",
+        occasion: "Casual",
+        originalPrice: 1299,
+        price: 899,
+        discountLabel: "30% OFF",
+        rating: 4.7,
+        badge: "New",
+        trending: false,
+        isNew: true,
+        imgFallback: "https://placehold.co/500x620/F6F2EC/111111?text=Kids+Hoodie+Set",
+        realImg: "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "sn-109",
+        name: "Cloud-Stride Running Sneakers",
+        category: "Footwear",
+        collection: "Summer",
+        occasion: "Sports",
+        originalPrice: 2499,
+        price: 1874,
+        discountLabel: "25% OFF",
+        rating: 4.8,
+        badge: "Bestseller",
+        trending: true,
+        isNew: false,
+        imgFallback: "https://placehold.co/500x620/222222/FFFFFF?text=Running+Sneakers",
+        realImg: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "sn-110",
+        name: "Seamless Sculpt Gym Set",
+        category: "Sportswear",
+        collection: "Summer",
+        occasion: "Sports",
+        originalPrice: 1499,
+        price: 949,
+        discountLabel: "36% OFF",
+        rating: 4.7,
+        badge: "Limited Stock",
+        trending: false,
+        isNew: false,
+        imgFallback: "https://placehold.co/500x620/96535E/FFFFFF?text=Sculpt+Gym+Set",
+        realImg: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=80"
+      }
+    ];
+
+    // Persistent state using localStorage
+    const STORAGE_KEYS = {
+      CART: "stylenest_cart_v1",
+      WISHLIST: "stylenest_wishlist_v1"
+    };
+
+    let cart = loadFromStorage(STORAGE_KEYS.CART, []);
+    let wishlist = loadFromStorage(STORAGE_KEYS.WISHLIST, []);
+    let promoApplied = false;
+
+    // Filter state
+    let currentFilter = {
+      type: "all", // all | category | collection | price | occasion | search
+      value: "",
+      sort: "featured"
+    };
+
+    function loadFromStorage(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveToStorage(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (err) {
+        console.error("Storage save error:", err);
+      }
+    }
+
+    /**
+     * Non-blocking toast message helper.
+     */
+    let toastTimer = null;
+    function showInfoToast(message) {
+      const banner = document.getElementById("toast-banner");
+      if (!banner) return;
+      banner.textContent = message;
+      banner.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        banner.classList.add("hidden");
+      }, 3200);
+    }
+
+    /**
+     * Renders star icons for a numeric rating (e.g., 4.9).
+     */
+    function renderStars(rating) {
+      const fullStars = Math.round(rating);
+      let stars = "";
+      for (let i = 1; i <= 5; i++) {
+        stars += i <= fullStars ? "★" : "☆";
+      }
+      return `<span class="text-rosegold text-xs tracking-tight" aria-label="${rating} out of 5 stars">${stars}</span>
+              <span class="text-[11px] text-muted font-medium ml-1">${rating.toFixed(1)}</span>`;
+    }
+
+    /**
+     * Generates a single product card HTML string.
+     */
+    function createProductCardHTML(product, compact = false) {
+      const isWishlisted = wishlist.includes(product.id);
+      const badgeColors = {
+        New: "bg-obsidian text-ivory",
+        Bestseller: "bg-rosegold text-ivory",
+        "Limited Stock": "bg-charcoal text-beige"
+      };
+      const badgeStyle = badgeColors[product.badge] || "bg-obsidian text-ivory";
+
+      return `
+        <article class="product-card bg-ivory border border-sand rounded-3xl overflow-hidden flex flex-col justify-between shadow-sm ${compact ? "min-w-[255px] sm:min-w-[275px] shrink-0" : ""}">
+          <div>
+            <!-- Image + Discount Badge + Optional Label + Wishlist Heart -->
+            <div class="relative h-60 sm:h-64 bg-beige overflow-hidden group">
+              <img
+                src="${product.imgFallback}"
+                data-real-src="${product.realImg}"
+                alt="${product.name}"
+                onerror="this.onerror=null; this.src='${product.imgFallback}';"
+                class="store-photo w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+
+              <!-- Discount Percentage Badge -->
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-ivory/95 text-obsidian text-[11px] font-bold shadow-xs">
+                ${product.discountLabel}
+              </span>
+
+              <!-- Optional Label (New / Bestseller / Limited Stock) -->
+              ${
+                product.badge
+                  ? `<span class="absolute bottom-3 left-3 px-2.5 py-1 rounded-full ${badgeStyle} text-[10px] font-semibold uppercase tracking-wider shadow-xs">
+                      ${product.badge}
+                    </span>`
+                  : ""
+              }
+
+              <!-- Wishlist Heart Button -->
+              <button
+                type="button"
+                onclick="toggleWishlist('${product.id}')"
+                aria-label="Toggle wishlist for ${product.name}"
+                aria-pressed="${isWishlisted}"
+                class="absolute top-3 right-3 w-9 h-9 rounded-full bg-ivory/95 hover:bg-ivory flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer"
+              >
+                <span class="${isWishlisted ? "text-rosegold" : "text-muted hover:text-rosegold"} text-base leading-none">
+                  ${isWishlisted ? "♥" : "♡"}
+                </span>
+              </button>
+            </div>
+
+            <!-- Card Details -->
+            <div class="p-4 sm:p-5">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="text-[11px] uppercase tracking-wider text-muted font-medium">${product.category}</span>
+                <div class="flex items-center">${renderStars(product.rating)}</div>
+              </div>
+
+              <h3 class="font-editorial text-base sm:text-lg font-bold text-obsidian line-clamp-1">
+                ${product.name}
+              </h3>
+
+              <!-- Pricing -->
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="text-base sm:text-lg font-bold text-obsidian">₹${product.price.toLocaleString("en-IN")}</span>
+                <span class="text-xs text-muted line-through">₹${product.originalPrice.toLocaleString("en-IN")}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <div class="px-4 sm:px-5 pb-4 sm:pb-5">
+            <button
+              type="button"
+              onclick="addToCart('${product.id}')"
+              class="w-full py-2.5 px-4 rounded-xl bg-obsidian hover:bg-rosegold text-ivory text-xs sm:text-sm font-semibold transition-colors duration-300 cursor-pointer"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    /**
+     * Renders the 8 clothing category cards.
+     */
+    function renderCategories() {
+      const grid = document.getElementById("categories-grid");
+      if (!grid) return;
+
+      grid.innerHTML = CATEGORIES.map(
+        (cat) => `
+          <div class="product-card bg-ivory border border-sand rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between">
+            <div class="h-48 sm:h-52 overflow-hidden bg-beige">
+              <img
+                src="${cat.imgFallback}"
+                data-real-src="${cat.realImg}"
+                alt="${cat.name} fashion category"
+                onerror="this.onerror=null; this.src='${cat.imgFallback}';"
+                class="store-photo w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div class="p-5 flex items-center justify-between gap-3">
+              <h3 class="font-editorial text-xl font-bold text-obsidian">${cat.name}</h3>
+              <button
+                type="button"
+                onclick="selectCategoryFilter('${cat.name}')"
+                class="px-4 py-2 rounded-full bg-beige hover:bg-rosegold text-obsidian hover:text-ivory text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Shop Now
+              </button>
+            </div>
+          </div>
+        `
+      ).join("");
+    }
+
+    /**
+     * Computes filtered & sorted product array based on active filters.
+     */
+    function getFilteredProducts() {
+      let list = [...PRODUCTS];
+
+      if (currentFilter.type === "category") {
+        list = list.filter((p) => p.category.toLowerCase() === currentFilter.value.toLowerCase());
+      } else if (currentFilter.type === "collection") {
+        list = list.filter((p) => p.collection.toLowerCase() === currentFilter.value.toLowerCase());
+      } else if (currentFilter.type === "occasion") {
+        list = list.filter((p) => p.occasion.toLowerCase() === currentFilter.value.toLowerCase());
+      } else if (currentFilter.type === "price") {
+        if (currentFilter.value === "under-499") list = list.filter((p) => p.price < 500);
+        else if (currentFilter.value === "500-999") list = list.filter((p) => p.price >= 500 && p.price <= 999);
+        else if (currentFilter.value === "1000-1999") list = list.filter((p) => p.price >= 1000 && p.price <= 1999);
+        else if (currentFilter.value === "above-2000") list = list.filter((p) => p.price > 2000);
+      } else if (currentFilter.type === "search" && currentFilter.value.trim() !== "") {
+        const q = currentFilter.value.toLowerCase().trim();
+        list = list.filter(
+          (p) =>
+            p.name.toLowerCase().includes(q) ||
+            p.category.toLowerCase().includes(q) ||
+            p.occasion.toLowerCase().includes(q) ||
+            p.collection.toLowerCase().includes(q)
+        );
+      }
+
+      if (currentFilter.sort === "price-low") {
+        list.sort((a, b) => a.price - b.price);
+      } else if (currentFilter.sort === "price-high") {
+        list.sort((a, b) => b.price - a.price);
+      } else if (currentFilter.sort === "rating") {
+        list.sort((a, b) => b.rating - a.rating);
+      }
+
+      return list;
+    }
+
+    /**
+     * Updates heading text and renders filtered products grid.
+     */
+    function renderProductsGrid() {
+      const grid = document.getElementById("products-grid");
+      const heading = document.getElementById("active-filter-heading");
+      const subtext = document.getElementById("active-filter-subtext");
+      if (!grid) return;
+
+      const filtered = getFilteredProducts();
+
+      if (heading && subtext) {
+        if (currentFilter.type === "all") {
+          heading.textContent = "Featured Fashion Picks";
+          subtext.textContent = `Showing ${filtered.length} curated pieces across StyleNest.`;
+        } else if (currentFilter.type === "category") {
+          heading.textContent = `${currentFilter.value} Collection`;
+          subtext.textContent = `Filtered by category: ${currentFilter.value} (${filtered.length} items).`;
+        } else if (currentFilter.type === "collection") {
+          heading.textContent = `${currentFilter.value} Edit`;
+          subtext.textContent = `Curated picks from the ${currentFilter.value} collection (${filtered.length} items).`;
+        } else if (currentFilter.type === "occasion") {
+          heading.textContent = `${currentFilter.value} Edit`;
+          subtext.textContent = `Styled for ${currentFilter.value} (${filtered.length} items).`;
+        } else if (currentFilter.type === "price") {
+          const labels = {
+            "under-499": "Under ₹499",
+            "500-999": "₹500 – ₹999",
+            "1000-1999": "₹1000 – ₹1999",
+            "above-2000": "Above ₹2000"
+          };
+          heading.textContent = `Shop ${labels[currentFilter.value] || "by Price"}`;
+          subtext.textContent = `Showing ${filtered.length} items in this price range.`;
+        } else if (currentFilter.type === "search") {
+          heading.textContent = `Search Results for “${currentFilter.value}”`;
+          subtext.textContent = `${filtered.length} matching item(s) found.`;
+        }
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full bg-ivory border border-sand rounded-3xl p-10 text-center space-y-3">
+            <p class="font-editorial text-2xl font-bold text-obsidian">No styles matched this filter</p>
+            <p class="text-sm text-muted">Try another category, price range, or reset all filters.</p>
+            <button type="button" onclick="resetAllFilters()" class="px-5 py-2.5 rounded-full bg-obsidian text-ivory text-xs font-semibold cursor-pointer">
+              Reset Filters
+            </button>
+          </div>
+        `;
+      } else {
+        grid.innerHTML = filtered.map((p) => createProductCardHTML(p, false)).join("");
+      }
+
+      upgradeImages();
+    }
+
+    /**
+     * Renders horizontal Trending Products and New Arrivals cards.
+     */
+    function renderTrendingAndNewArrivals() {
+      const trendingTrack = document.getElementById("trending-carousel");
+      const newArrivalsGrid = document.getElementById("new-arrivals-grid");
+
+      if (trendingTrack) {
+        const trendingItems = PRODUCTS.filter((p) => p.trending);
+        trendingTrack.innerHTML = trendingItems.map((p) => createProductCardHTML(p, true)).join("");
+      }
+
+      if (newArrivalsGrid) {
+        const newItems = PRODUCTS.filter((p) => p.isNew).slice(0, 4);
+        newArrivalsGrid.innerHTML = newItems.map((p) => createProductCardHTML(p, false)).join("");
+      }
+
+      upgradeImages();
+    }
+
+    // Filter action helpers
+    function selectCategoryFilter(categoryName) {
+      currentFilter = { type: "category", value: categoryName, sort: currentFilter.sort };
+      renderProductsGrid();
+      document.getElementById("products-section")?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function filterByCollection(collectionName) {
+      currentFilter = { type: "collection", value: collectionName, sort: currentFilter.sort };
+      renderProductsGrid();
+      document.getElementById("products-section")?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function filterByPriceRange(rangeKey) {
+      currentFilter = { type: "price", value: rangeKey, sort: currentFilter.sort };
+      renderProductsGrid();
+      document.getElementById("products-section")?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function filterByOccasion(occasionName) {
+      currentFilter = { type: "occasion", value: occasionName, sort: currentFilter.sort };
+      renderProductsGrid();
+      document.getElementById("products-section")?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function resetAllFilters() {
+      currentFilter = { type: "all", value: "", sort: "featured" };
+      const sortSelect = document.getElementById("sort-products-select");
+      const deskSearch = document.getElementById("header-search-input");
+      const mobSearch = document.getElementById("mobile-search-input");
+      if (sortSelect) sortSelect.value = "featured";
+      if (deskSearch) deskSearch.value = "";
+      if (mobSearch) mobSearch.value = "";
+      renderProductsGrid();
+    }
+
+    /**
+     * Wishlist functionality with badge update & modal view.
+     */
+    function toggleWishlist(productId) {
+      const idx = wishlist.indexOf(productId);
+      const product = PRODUCTS.find((p) => p.id === productId);
+      if (idx > -1) {
+        wishlist.splice(idx, 1);
+        showInfoToast(`Removed ${product?.name || "item"} from Wishlist`);
+      } else {
+        wishlist.push(productId);
+        showInfoToast(`Saved ${product?.name || "item"} to Wishlist`);
+      }
+      saveToStorage(STORAGE_KEYS.WISHLIST, wishlist);
+      updateHeaderBadges();
+      renderProductsGrid();
+      renderTrendingAndNewArrivals();
+      renderWishlistModalItems();
+    }
+
+    function renderWishlistModalItems() {
+      const container = document.getElementById("wishlist-items-container");
+      if (!container) return;
+
+      if (wishlist.length === 0) {
+        container.innerHTML = `<p class="text-center text-sm text-muted py-8">Your wishlist is empty. Tap ♥ on any product to save it here.</p>`;
+        return;
+      }
+
+      const savedProducts = PRODUCTS.filter((p) => wishlist.includes(p.id));
+      container.innerHTML = savedProducts
+        .map(
+          (item) => `
+          <div class="flex items-center gap-4 p-3 rounded-2xl bg-beige/70 border border-sand">
+            <img src="${item.imgFallback}" alt="${item.name}" class="w-16 h-20 object-cover rounded-xl shrink-0" />
+            <div class="flex-1 min-w-0">
+              <h4 class="font-editorial font-bold text-sm text-obsidian truncate">${item.name}</h4>
+              <p class="text-xs font-semibold text-obsidian mt-0.5">₹${item.price.toLocaleString("en-IN")}</p>
+              <div class="flex items-center gap-2 mt-2">
+                <button type="button" onclick="addToCart('${item.id}'); closeWishlistModal();" class="px-3 py-1 rounded-full bg-obsidian text-ivory text-[11px] font-semibold cursor-pointer">
+                  Move to Cart
+                </button>
+                <button type="button" onclick="toggleWishlist('${item.id}')" class="text-[11px] text-muted hover:text-rosegold underline cursor-pointer">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        `
+        )
+        .join("");
+    }
+
+    /**
+     * Shopping Cart functionality with localStorage persistence.
+     */
+    function addToCart(productId) {
+      const product = PRODUCTS.find((p) => p.id === productId);
+      if (!product) return;
+
+      const existing = cart.find((item) => item.id === productId);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          imgFallback: product.imgFallback,
+          quantity: 1
+        });
+      }
+
+      saveToStorage(STORAGE_KEYS.CART, cart);
+      updateHeaderBadges();
+      renderCartDrawer();
+      showInfoToast(`Added “${product.name}” to your cart`);
+    }
+
+    function updateCartQuantity(productId, delta) {
+      const item = cart.find((i) => i.id === productId);
+      if (!item) return;
+
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        cart = cart.filter((i) => i.id !== productId);
+      }
+
+      saveToStorage(STORAGE_KEYS.CART, cart);
+      updateHeaderBadges();
+      renderCartDrawer();
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter((i) => i.id !== productId);
+      saveToStorage(STORAGE_KEYS.CART, cart);
+      updateHeaderBadges();
+      renderCartDrawer();
+    }
+
+    function updateHeaderBadges() {
+      const totalCartQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const cartBadge = document.getElementById("cart-count-badge");
+      const wishBadge = document.getElementById("wishlist-count-badge");
+
+      if (cartBadge) cartBadge.textContent = String(totalCartQty);
+      if (wishBadge) wishBadge.textContent = String(wishlist.length);
+    }
+
+    function renderCartDrawer() {
+      const container = document.getElementById("cart-items-container");
+      const totalEl = document.getElementById("cart-total-price");
+      const subtitleEl = document.getElementById("cart-drawer-subtitle");
+      const shippingEl = document.getElementById("cart-shipping-label");
+      const promoBanner = document.getElementById("cart-promo-banner");
+      if (!container || !totalEl) return;
+
+      const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
+      if (subtitleEl) subtitleEl.textContent = `${totalCount} ${totalCount === 1 ? "item" : "items"} in cart`;
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-14 space-y-2">
+            <p class="font-editorial text-xl font-bold text-obsidian">Your bag is currently empty</p>
+            <p class="text-xs text-muted">Explore our New Arrivals or Bestsellers to add pieces.</p>
+          </div>
+        `;
+        totalEl.textContent = "₹0";
+        if (shippingEl) shippingEl.textContent = "Free above ₹999";
+        return;
+      }
+
+      container.innerHTML = cart
+        .map(
+          (item) => `
+          <div class="flex gap-4 p-3.5 rounded-2xl bg-beige/60 border border-sand items-center">
+            <img src="${item.imgFallback}" alt="${item.name}" class="w-16 h-20 rounded-xl object-cover shrink-0" />
+            <div class="flex-1 min-w-0">
+              <h4 class="font-editorial font-bold text-sm text-obsidian truncate">${item.name}</h4>
+              <p class="text-xs font-semibold text-charcoal mt-0.5">₹${(item.price * item.quantity).toLocaleString("en-IN")}</p>
+              <div class="flex items-center gap-2 mt-2.5">
+                <button type="button" onclick="updateCartQuantity('${item.id}', -1)" aria-label="Decrease quantity" class="w-7 h-7 rounded-lg bg-ivory border border-sand font-bold text-xs cursor-pointer">−</button>
+                <span class="text-xs font-semibold px-1.5">${item.quantity}</span>
+                <button type="button" onclick="updateCartQuantity('${item.id}', 1)" aria-label="Increase quantity" class="w-7 h-7 rounded-lg bg-ivory border border-sand font-bold text-xs cursor-pointer">+</button>
+              </div>
+            </div>
+            <button
+              type="button"
+              onclick="removeFromCart('${item.id}')"
+              aria-label="Remove ${item.name}"
+              class="text-xs font-medium text-muted hover:text-rosegold px-2 py-1 cursor-pointer"
+            >
+              Remove
+            </button>
+          </div>
+        `
+        )
+        .join("");
+
+      let subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+      if (promoApplied) {
+        subtotal = Math.round(subtotal * 0.7);
+      }
+
+      if (promoBanner) {
+        promoBanner.classList.toggle("hidden", !promoApplied);
+      }
+
+      if (shippingEl) {
+        shippingEl.textContent = subtotal >= 999 ? "FREE (Order > ₹999)" : "₹99";
+      }
+
+      const finalTotal = subtotal >= 999 ? subtotal : subtotal + 99;
+      totalEl.textContent = `₹${finalTotal.toLocaleString("en-IN")}`;
+    }
+
+    function openCartDrawer() {
+      const backdrop = document.getElementById("cart-backdrop");
+      const drawer = document.getElementById("cart-drawer");
+      const msgEl = document.getElementById("checkout-status-msg");
+      if (msgEl) msgEl.classList.add("hidden");
+      renderCartDrawer();
+      backdrop?.classList.remove("hidden");
+      requestAnimationFrame(() => {
+        drawer?.classList.remove("translate-x-full");
+      });
+    }
+
+    function closeCartDrawer() {
+      const backdrop = document.getElementById("cart-backdrop");
+      const drawer = document.getElementById("cart-drawer");
+      drawer?.classList.add("translate-x-full");
+      setTimeout(() => {
+        backdrop?.classList.add("hidden");
+      }, 280);
+    }
+
+    function openWishlistModal() {
+      renderWishlistModalItems();
+      const modal = document.getElementById("wishlist-modal");
+      modal?.classList.remove("hidden");
+      modal?.classList.add("flex");
+    }
+
+    function closeWishlistModal() {
+      const modal = document.getElementById("wishlist-modal");
+      modal?.classList.add("hidden");
+      modal?.classList.remove("flex");
+    }
+
+    function applyPromoCode(code) {
+      promoApplied = true;
+      renderCartDrawer();
+      showInfoToast(`Promo code ${code} activated! Extra 30% discount previewed in your cart.`);
+      openCartDrawer();
+    }
+
+    function copyCouponCode(code) {
+      try {
+        const tempInput = document.createElement("input");
+        tempInput.value = code;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        showInfoToast(`Copied coupon code ${code} to clipboard!`);
+      } catch {
+        showInfoToast(`Use coupon code ${code} at checkout!`);
+      }
+    }
+
+    /**
+     * Live countdown timer for limited-time flash sale.
+     */
+    function startSaleCountdown() {
+      const daysEl = document.getElementById("cd-days");
+      const hoursEl = document.getElementById("cd-hours");
+      const minsEl = document.getElementById("cd-mins");
+      const secsEl = document.getElementById("cd-secs");
+      if (!daysEl || !hoursEl || !minsEl || !secsEl) return;
+
+      // Target 2 days, 14 hours, 38 minutes from load
+      const targetTime = Date.now() + ((2 * 24 + 14) * 3600 + 38 * 60 + 45) * 1000;
+
+      function tick() {
+        const diff = Math.max(0, targetTime - Date.now());
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+
+        daysEl.textContent = String(d).padStart(2, "0");
+        hoursEl.textContent = String(h).padStart(2, "0");
+        minsEl.textContent = String(m).padStart(2, "0");
+        secsEl.textContent = String(s).padStart(2, "0");
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    /**
+     * Scroll reveal observer for smooth section entrance animations.
+     */
+    function initScrollReveal() {
+      const els = document.querySelectorAll(".reveal-on-scroll");
+      if (!("IntersectionObserver" in window)) {
+        els.forEach((el) => el.classList.add("is-visible"));
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+
+      els.forEach((el) => observer.observe(el));
+    }
+
+    /**
+     * Upgrades data-real-src photography when loaded cleanly.
+     */
+    function upgradeImages() {
+      document.querySelectorAll("img[data-real-src]").forEach((img) => {
+        if (img.dataset.upgraded === "1") return;
+        const real = img.getAttribute("data-real-src");
+        if (!real) return;
+        const loader = new Image();
+        loader.onload = () => {
+          img.src = real;
+          img.dataset.upgraded = "1";
+        };
+        loader.src = real;
+      });
+    }
+
+    // Initialize interactive listeners on DOM ready
+    document.addEventListener("DOMContentLoaded", () => {
+      renderCategories();
+      renderProductsGrid();
+      renderTrendingAndNewArrivals();
+      updateHeaderBadges();
+      renderCartDrawer();
+      startSaleCountdown();
+      initScrollReveal();
+      upgradeImages();
+
+      const yearEl = document.getElementById("copyright-year");
+      if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+      // Mobile menu drawer toggle
+      const menuBtn = document.getElementById("mobile-menu-toggle");
+      const drawer = document.getElementById("mobile-drawer");
+      const openIcon = document.getElementById("menu-open-icon");
+      const closeIcon = document.getElementById("menu-close-icon");
+
+      menuBtn?.addEventListener("click", () => {
+        const isHidden = drawer?.classList.contains("hidden");
+        if (isHidden) {
+          drawer?.classList.remove("hidden");
+          openIcon?.classList.add("hidden");
+          closeIcon?.classList.remove("hidden");
+          menuBtn.setAttribute("aria-expanded", "true");
+        } else {
+          drawer?.classList.add("hidden");
+          openIcon?.classList.remove("hidden");
+          closeIcon?.classList.add("hidden");
+          menuBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.querySelectorAll(".mobile-drawer-link").forEach((link) => {
+        link.addEventListener("click", () => {
+          drawer?.classList.add("hidden");
+          openIcon?.classList.remove("hidden");
+          closeIcon?.classList.add("hidden");
+          menuBtn?.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      // Search handlers (Desktop + Mobile)
+      const deskSearch = document.getElementById("header-search-input");
+      const mobSearch = document.getElementById("mobile-search-input");
+
+      function runSearch(query) {
+        currentFilter = { type: "search", value: query, sort: currentFilter.sort };
+        renderProductsGrid();
+      }
+
+      deskSearch?.addEventListener("input", (e) => runSearch(e.target.value));
+      mobSearch?.addEventListener("input", (e) => runSearch(e.target.value));
+      document.getElementById("header-search-btn")?.addEventListener("click", () => {
+        runSearch(deskSearch?.value || "");
+        document.getElementById("products-section")?.scrollIntoView({ behavior: "smooth" });
+      });
+
+      // Sort selector
+      document.getElementById("sort-products-select")?.addEventListener("change", (e) => {
+        currentFilter.sort = e.target.value;
+        renderProductsGrid();
+      });
+
+      // Trending carousel arrow buttons
+      const track = document.getElementById("trending-carousel");
+      document.getElementById("trending-prev-btn")?.addEventListener("click", () => {
+        track?.scrollBy({ left: -320, behavior: "smooth" });
+      });
+      document.getElementById("trending-next-btn")?.addEventListener("click", () => {
+        track?.scrollBy({ left: 320, behavior: "smooth" });
+      });
+
+      // Cart & Wishlist open/close controls
+      document.getElementById("open-cart-btn")?.addEventListener("click", openCartDrawer);
+      document.getElementById("close-cart-btn")?.addEventListener("click", closeCartDrawer);
+      document.getElementById("cart-backdrop")?.addEventListener("click", (e) => {
+        if (e.target === document.getElementById("cart-backdrop")) closeCartDrawer();
+      });
+
+      document.getElementById("open-wishlist-btn")?.addEventListener("click", openWishlistModal);
+      document.getElementById("close-wishlist-btn")?.addEventListener("click", closeWishlistModal);
+      document.getElementById("wishlist-modal")?.addEventListener("click", (e) => {
+        if (e.target === document.getElementById("wishlist-modal")) closeWishlistModal();
+      });
+
+      // Proceed to Checkout button
+      document.getElementById("checkout-btn")?.addEventListener("click", () => {
+        const msgEl = document.getElementById("checkout-status-msg");
+        if (cart.length === 0) {
+          showInfoToast("Add at least one item to your cart before checking out.");
+          return;
+        }
+        if (msgEl) {
+          msgEl.textContent = "Order summary prepared! Thank you for shopping with StyleNest.";
+          msgEl.classList.remove("hidden");
+        }
+        showInfoToast("Checkout ready! Your StyleNest bag is saved.");
+      });
+
+      // Newsletter subscription form
+      const newsletterForm = document.getElementById("newsletter-form");
+      const newsletterSuccess = document.getElementById("newsletter-success");
+      newsletterForm?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById("newsletter-email");
+        const addr = emailInput?.value.trim() || "your inbox";
+        if (newsletterSuccess) {
+          newsletterSuccess.textContent = `Welcome to StyleNest! Subscribed ${addr} for early access & code STYLE30 perks.`;
+          newsletterSuccess.classList.remove("hidden");
+        }
+        newsletterForm.reset();
+      });
+    });
+  </script>
+</body>
+</html>
